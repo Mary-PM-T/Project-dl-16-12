@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng Phân Công Project Đồ Thị</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 30px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        h1 {
+            color: #2d3748;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #718096;
+            font-size: 1em;
+        }
+        tr {
+            border: 3px solid black;     /* Viền đậm quanh mỗi hàng */
+        }
+        td, th {
+            border: 1px solid #000;      /* Viền nhẹ giữa các ô (nếu muốn) */
+        }
+        table {
+            border-collapse: collapse;
+        }
+
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background: #48bb78;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #38a169;
+        }
+        
+        .btn-danger {
+            background: #f56565;
+            color: white;
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+        
+        .btn-danger:hover {
+            background: #e53e3e;
+        }
+        
+        .member-section {
+            background: #f7fafc;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .member-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            color: #2d3748;
+        }
+        
+        .member-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .member-input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        .member-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .member-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .member-tag {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .table-wrapper {
+            overflow-x: auto;
+            margin-bottom: 30px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        thead {
+            background: #667eea;
+            color: white;
+        }
+        
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        tbody tr:hover {
+            background: #f7fafc;
+        }
+        
+        .main-category-cell {
+            background: #4c51bf;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1em;
+            border-right: 3px solid #667eea;
+            text-align: center;
+        }
+        
+        .category-cell {
+            background: #edf2f7;
+            font-weight: 600;
+            color: #2d3748;
+            border-right: 2px solid #cbd5e0;
+        }
+        
+        .stt-cell {
+            text-align: center;
+            font-weight: 600;
+            color: #4a5568;
+            width: 60px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .badge-easy {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+        
+        .badge-medium {
+            background: #fef5e7;
+            color: #744210;
+        }
+        
+        .badge-hard {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+        
+        select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .summary {
+            background: #ebf4ff;
+            padding: 25px;
+            border-radius: 10px;
+        }
+        
+        .summary h3 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #718096;
+            font-size: 0.95em;
+        }
+        
+        .color-indigo { color: #667eea; }
+        .color-green { color: #48bb78; }
+        .color-orange { color: #ed8936; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>📊 Bảng Phân Công Project Đồ Thị</h1>
+                <p class="subtitle">Quản lý phân công công việc cho dự án cấu trúc dữ liệu</p>
+            </div>
+            <button class="btn btn-primary" onclick="exportToExcel()">📥 Xuất Excel</button>
+        </div>
+        
+        <div class="member-section">
+            <div class="member-header">
+                👥 Quản lý thành viên
+            </div>
+            <div class="member-input-group">
+                <input type="text" id="newMember" class="member-input" placeholder="Nhập tên thành viên..." onkeypress="handleKeyPress(event)">
+                <button class="btn btn-success" onclick="addMember()">➕ Thêm</button>
+            </div>
+            <div class="member-list" id="memberList"></div>
+        </div>
+        
+        <div class="table-wrapper">
+            <table id="assignmentTable">
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">STT</th>
+                        <th style="width: 150px;">Hạng mục chung</th>
+                        <th style="width: 200px;">Hạng mục</th>
+                        <th>Nhiệm vụ</th>
+                        <th style="width: 140px;">Độ phức tạp</th>
+                        <th style="width: 140px;">Thời gian</th>
+                        <th style="width: 200px;">Người phụ trách</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+        
+        <div class="summary">
+            <h3>📈 Tổng quan dự án</h3>
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number color-indigo" id="totalTasks">0</div>
+                    <div class="stat-label">Tổng số nhiệm vụ</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number color-green" id="totalMembers">0</div>
+                    <div class="stat-label">Số thành viên</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number color-orange">~40-60</div>
+                    <div class="stat-label">Ngày hoàn thành (ước tính)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const tasks = [
+            {
+                mainCategory: '1. SORT',
+                categories: [
+                    {
+                        category: 'Sort Algorithms - Cơ bản',
+                        items: [
+                            { name: 'Shell Sort', complexity: 'Trung bình', time: '2-3 ngày' },
+                            { name: 'Counting Sort', complexity: 'Dễ', time: '1-2 ngày' },
+                            { name: 'Radix Sort', complexity: 'Trung bình', time: '2-3 ngày' },
+                            { name: 'Bucket Sort', complexity: 'Trung bình', time: '2-3 ngày' }
+                        ]
+                    },
+                    {
+                        category: 'Bài tập nâng cao - Sort',
+                        items: [
+                            { name: 'Sắp xếp theo họ và tên (Bucket + Radix Sort)', complexity: 'Khó', time: '3-4 ngày' },
+                            { name: 'Bài tập nâng cao khác (tùy chọn)', complexity: 'Trung bình', time: '2-3 ngày' }
+                        ]
+                    }
+                ]
+            },
+            {
+                mainCategory: '2. GRAPH',
+                categories: [
+                    {
+                        category: 'Cài đặt & Input',
+                        items: [
+                            { name: 'Nhập đồ thị từ bàn phím', complexity: 'Dễ', time: '1-2 ngày' },
+                            { name: 'Đọc đồ thị từ file', complexity: 'Trung bình', time: '2 ngày' },
+                            { name: 'Tạo đồ thị ngẫu nhiên', complexity: 'Dễ', time: '1 ngày' }
+                        ]
+                    },
+                    {
+                        category: 'Cấu trúc dữ liệu',
+                        items: [
+                            { name: 'Danh sách kề (Adjacency List)', complexity: 'Trung bình', time: '2 ngày' },
+                            { name: 'Ma trận kề (Adjacency Matrix)', complexity: 'Dễ', time: '1-2 ngày' },
+                            { name: 'Danh sách cạnh (Edge List)', complexity: 'Dễ', time: '1 ngày' },
+                            { name: 'Cấu trúc Node (Node Structure)', complexity: 'Dễ', time: '1 ngày' },
+                            { name: 'Chuyển đổi giữa các cấu trúc', complexity: 'Trung bình', time: '2 ngày' }
+                        ]
+                    },
+                    {
+                        category: 'Graph Basic Operations',
+                        items: [
+                            { name: 'Thêm/Xóa Đỉnh (Node)', complexity: 'Dễ', time: '1-2 ngày' },
+                            { name: 'Thêm/Xóa Cạnh (Edge)', complexity: 'Dễ', time: '1-2 ngày' },
+                            { name: 'Kiểm tra đồ thị hợp lệ', complexity: 'Dễ', time: '1 ngày' }
+                        ]
+                    },
+                    {
+                        category: 'Graph Properties',
+                        items: [
+                            { name: 'Kiểm tra liên thông', complexity: 'Trung bình', time: '2 ngày' },
+                            { name: 'Đếm số thành phần liên thông', complexity: 'Trung bình', time: '2 ngày' },
+                            { name: 'Kiểm tra chu trình (Cycle Detection)', complexity: 'Trung bình', time: '2-3 ngày' }
+                        ]
+                    },
+                    {
+                        category: 'Shortest Path Algorithms',
+                        items: [
+                            { name: 'Dijkstra Algorithm', complexity: 'Khó', time: '3-4 ngày' },
+                            { name: 'Floyd-Warshall Algorithm', complexity: 'Khó', time: '3-4 ngày' },
+                            { name: 'Bellman-Ford Algorithm', complexity: 'Khó', time: '3-4 ngày' }
+                        ]
+                    },
+                    {
+                        category: 'Minimum Spanning Tree',
+                        items: [
+                            { name: 'Prim Algorithm', complexity: 'Khó', time: '3-4 ngày' },
+                            { name: 'Kruskal Algorithm', complexity: 'Khó', time: '3-4 ngày' }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        let members = ['Nguyễn Thị Kim Oanh', 'Trương Bình Minh', 'Đoàn Vũ Thiên Lộc'];
+        let assignments = {};
+
+        /* ============================
+        🔥 LOAD DATA từ localStorage
+        ============================ */
+        const savedMembers = JSON.parse(localStorage.getItem("members"));
+        const savedAssignments = JSON.parse(localStorage.getItem("assignments"));
+
+        if (savedMembers) members = savedMembers;
+        if (savedAssignments) assignments = savedAssignments;
+
+        function saveData() {
+            localStorage.setItem("members", JSON.stringify(members));
+            localStorage.setItem("assignments", JSON.stringify(assignments));
+        }
+
+        /* ============================
+        RENDER + MAIN LOGIC
+        ============================ */
+
+        function init() {
+            let taskIndex = 0;
+
+            // Nếu chưa có assignments thì tạo mới
+            if (!savedAssignments) {
+                tasks.forEach((mainCat) => {
+                    mainCat.categories.forEach((category) => {
+                        category.items.forEach((item) => {
+                            const key = `${mainCat.mainCategory}-${category.category}-${item.name}`;
+                            assignments[key] = members[taskIndex % members.length];
+                            taskIndex++;
+                        });
+                    });
+                });
+            }
+
+            renderMembers();
+            renderTable();
+            updateStats();
+        }
+
+        function renderMembers() {
+            const memberList = document.getElementById('memberList');
+            memberList.innerHTML = members.map((member, index) => `
+                <div class="member-tag">
+                    <span>${member}</span>
+                    <button class="btn btn-danger" onclick="removeMember(${index})">❌</button>
+                </div>
+            `).join('');
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            let html = '';
+            let stt = 1;
+
+            tasks.forEach((mainCat) => {
+                let mainCatRowCount = 0;
+                mainCat.categories.forEach(cat => {
+                    mainCatRowCount += cat.items.length;
+                });
+
+                let isFirstMainCatRow = true;
+
+                mainCat.categories.forEach((category) => {
+                    category.items.forEach((item, itemIdx) => {
+                        const key = `${mainCat.mainCategory}-${category.category}-${item.name}`;
+                        const isFirstInCategory = itemIdx === 0;
+
+                        html += '<tr>';
+                        html += `<td class="stt-cell">${stt}</td>`;
+
+                        if (isFirstMainCatRow) {
+                            html += `<td class="main-category-cell" rowspan="${mainCatRowCount}">${mainCat.mainCategory}</td>`;
+                            isFirstMainCatRow = false;
+                        }
+
+                        if (isFirstInCategory) {
+                            html += `<td class="category-cell" rowspan="${category.items.length}">${category.category}</td>`;
+                        }
+
+                        const badgeClass = item.complexity === 'Dễ'
+                            ? 'badge-easy'
+                            : item.complexity === 'Trung bình'
+                                ? 'badge-medium'
+                                : 'badge-hard';
+
+                        html += `
+                            <td>${item.name}</td>
+                            <td><span class="badge ${badgeClass}">${item.complexity}</span></td>
+                            <td>${item.time}</td>
+                            <td>
+                                <select onchange="updateAssignment('${key}', this.value)">
+                                    ${members.map(m => `<option value="${m}" ${assignments[key] === m ? 'selected' : ''}>${m}</option>`).join('')}
+                                </select>
+                            </td>
+                        `;
+
+                        html += '</tr>';
+                        stt++;
+                    });
+                });
+            });
+
+            tbody.innerHTML = html;
+        }
+
+        function addMember() {
+            const input = document.getElementById('newMember');
+            const newMember = input.value.trim();
+
+            if (newMember) {
+                members.push(newMember);
+                input.value = '';
+                renderMembers();
+                renderTable();
+                updateStats();
+                saveData();   // 🔥 save
+            }
+        }
+
+        function removeMember(index) {
+            if (members.length > 1) {
+                const memberToRemove = members[index];
+                members.splice(index, 1);
+
+                Object.keys(assignments).forEach(key => {
+                    if (assignments[key] === memberToRemove) {
+                        assignments[key] = members[0];
+                    }
+                });
+
+                renderMembers();
+                renderTable();
+                updateStats();
+                saveData();  // 🔥 save
+            } else {
+                alert('Phải có ít nhất 1 thành viên!');
+            }
+        }
+
+        function updateAssignment(key, member) {
+            assignments[key] = member;
+            saveData();  // 🔥 save khi đổi dropdown
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                addMember();
+            }
+        }
+
+        function updateStats() {
+            let totalTasks = 0;
+            tasks.forEach(mainCat => {
+                mainCat.categories.forEach(cat => {
+                    totalTasks += cat.items.length;
+                });
+            });
+            document.getElementById('totalTasks').textContent = totalTasks;
+            document.getElementById('totalMembers').textContent = members.length;
+        }
+
+        function exportToExcel() {
+            let csv = '\uFEFFSTT,Hạng mục chung,Hạng mục,Nhiệm vụ,Độ phức tạp,Thời gian ước tính,Người phụ trách\n';
+            let stt = 1;
+
+            tasks.forEach((mainCat) => {
+                mainCat.categories.forEach((category) => {
+                    category.items.forEach((item) => {
+                        const key = `${mainCat.mainCategory}-${category.category}-${item.name}`;
+                        csv += `${stt},"${mainCat.mainCategory}","${category.category}","${item.name}","${item.complexity}","${item.time}","${assignments[key]}"\n`;
+                        stt++;
+                    });
+                });
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'phan_cong_project_do_thi.csv';
+            link.click();
+        }
+
+        init();
+    </script>
+
+</body>
+</html>
